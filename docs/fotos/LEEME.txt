@@ -1,0 +1,5 @@
+Pon aquí las fotos de tus presentaciones para que aparezcan en la galería.
+Nómbralas exactamente así (formato .jpg):
+  foto-1.jpg  foto-2.jpg  foto-3.jpg  foto-4.jpg  foto-5.jpg  foto-6.jpg
+Recomendado: horizontales, mínimo 1200 px de ancho, buena luz.
+Luego vuelve a publicar el sitio. Si falta alguna, se muestra un marco dorado.
