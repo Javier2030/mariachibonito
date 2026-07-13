@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>Mariachi Bonito estuvo aquí 🎺</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+:root{--wine:#6E1423;--wine2:#3d0a12;--gold:#E8C75A;--gold2:#C9A227;--cream:#fdf6e3}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#8a1b2c,#3d0a12 60%,#1c0508);color:#fff;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:22px 18px 34px;text-align:center;overflow-x:hidden}
+.papel{width:100%;max-width:460px;height:14px;background:repeating-linear-gradient(90deg,var(--gold) 0 22px,#E0875E 22px 44px,var(--cream) 44px 66px,var(--gold2) 66px 88px);-webkit-mask:linear-gradient(#000 0 0) top/100% 3px no-repeat,radial-gradient(circle at 11px 14px,transparent 6px,#000 6px) top left/22px 14px repeat-x;mask:linear-gradient(#000 0 0) top/100% 3px no-repeat,radial-gradient(circle at 11px 14px,transparent 6px,#000 6px) top left/22px 14px repeat-x;margin-bottom:20px;opacity:.9}
+.logo{font-size:15px;letter-spacing:.28em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:6px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,9vw,44px);line-height:1.05;margin:6px 0 4px;text-shadow:0 3px 20px rgba(0,0,0,.5)}
+h1 b{color:var(--gold)}
+.sector{display:inline-block;margin:12px 0 2px;font-size:clamp(19px,6vw,26px);font-weight:800;color:#1c0f04;background:linear-gradient(135deg,var(--gold),#fff3cf);padding:8px 22px;border-radius:16px;box-shadow:0 12px 32px -10px rgba(232,199,90,.6);min-height:1.4em}
+.sub{font-size:16px;color:#f3e2c9;margin:14px auto 0;max-width:420px;line-height:1.55}
+.vid{width:100%;max-width:440px;aspect-ratio:16/9;border-radius:18px;overflow:hidden;margin:20px auto;border:2px solid rgba(232,199,90,.5);box-shadow:0 24px 60px -22px #000;background:#000}
+.vid iframe{width:100%;height:100%;border:0;display:block}
+.cta{width:100%;max-width:440px;display:flex;flex-direction:column;gap:12px;margin-top:4px}
+a.btn{display:flex;align-items:center;justify-content:center;gap:11px;padding:17px 18px;border-radius:16px;font-size:18px;font-weight:800;text-decoration:none;color:#fff;box-shadow:0 12px 30px -12px rgba(0,0,0,.6);transition:transform .12s}
+a.btn:active{transform:scale(.97)}
+.wa{background:linear-gradient(135deg,#25d366,#128c4a)}
+.call{background:linear-gradient(135deg,#e8c75a,#c9a227);color:#3d0a12}
+.rev{background:linear-gradient(135deg,#4285f4,#2b6cd4)}
+.ig{background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af)}
+.fb{background:linear-gradient(135deg,#1877f2,#0c5bd0)}
+.ico{font-size:21px;line-height:1}
+.tip{font-size:13px;color:#c9a98a;margin-top:18px;max-width:420px;line-height:1.5}
+.foot{margin-top:20px;font-size:12px;color:#8a6f5a}
+.pulse{animation:p 2s ease-in-out infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:.55}}
+</style>
+</head>
+<body>
+<div class="papel"></div>
+<div class="logo">Mariachi Bonito Tecalitlán</div>
+<h1>¡Nos <b>vimos</b> hoy! 🎺</h1>
+<div class="sector" id="sector"><span class="pulse">Ubicando tu zona…</span></div>
+<p class="sub" id="sub">Si te tocó el corazón la serenata, aquí tienes al grupo — sin tarjetas, a un toque.</p>
+
+<div class="vid">
+  <iframe src="https://www.youtube-nocookie.com/embed/qsP7dqbNm80?rel=0&modestbranding=1" title="Serenata de Mariachi Bonito" loading="lazy" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<div class="cta">
+  <a class="btn wa" id="wa" href="https://wa.me/573014232500"><span class="ico">💬</span> Pedir mi serenata por WhatsApp</a>
+  <a class="btn call" href="tel:+573014232500"><span class="ico">📞</span> Llamar al 301 4232500</a>
+  <a class="btn rev" href="https://search.google.com/local/writereview?placeid=ChIJ_4cL9NWjP44RTdp-IGsT8ck" target="_blank" rel="noopener"><span class="ico">⭐</span> Dejarnos 5 estrellas en Google</a>
+  <a class="btn ig" href="https://instagram.com/mariachibonito/" target="_blank" rel="noopener"><span class="ico">📸</span> Seguirnos en Instagram</a>
+  <a class="btn fb" href="https://facebook.com/profile.php?id=61591633056152" target="_blank" rel="noopener"><span class="ico">👍</span> Dale Me gusta en Facebook</a>
+</div>
+
+<p class="tip" id="tip">Guarda el número: el próximo cumpleaños, aniversario o sorpresa lo agradeces. Atendemos toda Bogotá, 24 horas.</p>
+<p class="foot">mariachibonito.com · serenatas a domicilio desde $230.000</p>
+
+<script>
+(function(){
+  var WA_BASE="https://wa.me/573014232500?text=";
+  function setWA(zona){
+    var msg = zona
+      ? "Hola Mariachi Bonito, los vi en "+zona+" y quiero una serenata así 🎺"
+      : "Hola Mariachi Bonito, quiero una serenata 🎺";
+    document.getElementById("wa").href = WA_BASE + encodeURIComponent(msg);
+  }
+  setWA(null);
+  var elS=document.getElementById("sector"), elSub=document.getElementById("sub");
+  if(!navigator.geolocation){ elS.innerHTML="en Bogotá"; return; }
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var la=pos.coords.latitude.toFixed(4), lo=pos.coords.longitude.toFixed(4);
+    fetch("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+la+"&longitude="+lo+"&localityLanguage=es")
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var loc = d.locality || d.city || (d.localityInfo && d.localityInfo.administrative && d.localityInfo.administrative.slice(-1)[0] && d.localityInfo.administrative.slice(-1)[0].name) || "";
+        loc = (loc||"").replace(/^Localidad( de)? /i,"").trim();
+        var ciudad = d.city || "Bogotá";
+        var zona = loc && loc.toLowerCase()!==ciudad.toLowerCase() ? loc : ciudad;
+        if(zona){
+          elS.textContent = "en "+zona;
+          elSub.innerHTML = "Estuvimos cantando por <b>"+zona+"</b> y nos alegró coincidir contigo. Aquí está el grupo, a un toque:";
+          setWA(zona);
+        } else { elS.textContent="en Bogotá"; }
+      })
+      .catch(function(){ elS.textContent="en Bogotá"; });
+  }, function(){
+    elS.textContent="en Bogotá";
+    elSub.textContent="Aquí tienes al grupo de la serenata — a un toque, sin tarjetas.";
+  }, {enableHighAccuracy:true, timeout:8000, maximumAge:60000});
+})();
+</script>
+</body>
+</html>
