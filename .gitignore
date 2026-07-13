@@ -32,3 +32,10 @@ yt_videos_all.json
 *.bundle
 carro_watch.py
 carro_history.json
+claude_paa_session.sh
+claude_paa.log
+paa_history.json
+dom_watch.py
+dom_watch_state.json
+serp_day1.py
+DESPLIEGUE_local.md
