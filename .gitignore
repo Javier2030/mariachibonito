@@ -40,3 +40,5 @@ dom_watch_state.json
 serp_day1.py
 DESPLIEGUE_local.md
 serp_today.py
+index_turbo.py
+index_turbo_state.json
