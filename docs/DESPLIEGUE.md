@@ -38,7 +38,7 @@ Compra el que salga **libre** en un registrador barato (un `.com` ronda USD 10�
 
 ## 3) Tus datos ✅ (ya quedaron listos)
 Ya está todo personalizado: marca **Mariachi Bonito Tecalitlán**, teléfono y
-WhatsApp **301 4232500** en el formulario y los botones, y sin reseñas inventadas.
+WhatsApp **322 3623930** en el formulario y los botones, y sin reseñas inventadas.
 Solo falta que TÚ, cuando puedas, añadas **fotos y un video reales** de tu grupo
 (en la galería) y **reseñas reales** cuando las tengas. Nada de esto frena la publicación.
 
