@@ -271,7 +271,7 @@ footer a:hover{color:var(--gold-2)}
 @media(max-width:760px){
 .hero::before{background:none;animation:none}
 }
-/* © 2026 Mariachi Bonito Tecalitlán — diseño original, todos los derechos reservados. Huella: mbt-origen-a9f37c21. */
+/* © 2026 Mariachi Bonito Bogotá — diseño original, todos los derechos reservados. Huella: mbt-origen-a9f37c21. */
 /* ── Última generación: picture transparente, View Transitions, hero AVIF ── */
 .gallery picture{display:contents}
 @view-transition{navigation:auto}
