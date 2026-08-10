@@ -60,3 +60,7 @@ precios_municipios.json
 precios_municipios.json.bak
 serp_run.py
 box_run.py
+
+# arrastrados por error en e823121 (10-ago) — estrategia interna
+MAPA_ALIADOS.md
+mapa_aliados.py
