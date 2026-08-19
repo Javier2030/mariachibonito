@@ -213,8 +213,8 @@ footer a:hover{color:var(--gold-2)}
 /* ── Lightbox: foto al frente ── */
 .gallery img{cursor:zoom-in}
 #lightbox{position:fixed;inset:0;background:rgba(20,4,7,.93);display:none;align-items:center;justify-content:center;z-index:100;cursor:zoom-out;backdrop-filter:blur(8px);padding:18px}
-#lightbox.on{display:flex;animation:lbIn .25s var(--ease)}
-#lightbox img{max-width:96vw;max-height:90vh;border-radius:16px;box-shadow:0 30px 80px -10px rgba(0,0,0,.8);border:1px solid var(--glass-border);animation:lbZoom .3s var(--ease)}
+#lightbox.on{display:flex;animation:lbIn .5s var(--ease)}
+#lightbox img{max-width:96vw;max-height:90vh;border-radius:16px;box-shadow:0 30px 80px -10px rgba(0,0,0,.8);border:1px solid var(--glass-border);animation:lbZoom .55s var(--ease)}
 @keyframes lbIn{from{opacity:0}to{opacity:1}}
 @keyframes lbZoom{from{transform:scale(.92);opacity:.4}to{transform:scale(1);opacity:1}}
 
@@ -444,7 +444,8 @@ h2.note.zoomed{transform:none;color:var(--gold-2);text-shadow:none}
 .gallery img.big{grid-column:span 2;grid-row:auto;height:190px}
 }
 /* ── Lightbox: abre creciendo desde pequeño, cierra encogiéndose ── */
-#lightbox img{animation:lbGrow .32s var(--ease)}
+/* lbGrow retirado 19-ago-2026: pisaba a lbZoom con otra duracion y el visor
+   arrancaba mas seco que el resto del sitio */
 @keyframes lbGrow{from{transform:scale(.35);opacity:0}to{transform:scale(1);opacity:1}}
 #lightbox.closing{animation:none;background:rgba(20,4,7,0);backdrop-filter:blur(0)}
 #lightbox.closing img{animation:lbShrink .3s var(--ease) forwards}
@@ -541,4 +542,19 @@ html{color-scheme:dark;scroll-padding-top:96px}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
     transition-duration:.001ms!important;scroll-behavior:auto!important}
   .reveal{opacity:1!important;transform:none!important}
+}
+
+/* ── VISOR DE FOTOS ── El cambio de foto era un corte seco (se cambiaba el src y ya):
+   por eso "se sentia robotico". Ahora sale hacia un lado y entra desde el otro con la
+   misma curva del resto del sitio, var(--ease) = cubic-bezier(.22,1,.36,1). */
+#lightbox img{--dx:0px;transition:opacity .42s var(--ease),transform .42s var(--ease)}
+#lightbox img.lb-swap{opacity:0;transform:translateX(var(--dx)) scale(.985)}
+#lightbox img.lb-notr{transition:none}
+#lightbox .lb-x,#lightbox .lb-prev,#lightbox .lb-next,#lightbox .lb-cont{
+ opacity:0;animation:lbCtl .6s var(--ease) .12s forwards}
+@keyframes lbCtl{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+ #lightbox.on{animation:none}
+ #lightbox img{animation:none;transition:none}
+ #lightbox .lb-x,#lightbox .lb-prev,#lightbox .lb-next,#lightbox .lb-cont{animation:none;opacity:1}
 }
