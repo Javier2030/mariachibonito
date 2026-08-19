@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — La Candelaria",
+ "short_name": "Mariachi La Candelaria",
+ "description": "Serenatas y mariachis a domicilio en La Candelaria, las 24 horas. Precios de La Candelaria.",
+ "start_url": "/mariachis-la-candelaria-bogota.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en La Candelaria",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20La%20Candelaria"
+  },
+  {
+   "name": "Precios en La Candelaria",
+   "url": "/mariachis-la-candelaria-bogota.html#paquetes"
+  }
+ ]
+}
