@@ -486,3 +486,59 @@ h2.note.zoomed{transform:none;color:var(--gold-2);text-shadow:none}
  background:linear-gradient(180deg,transparent 62%,rgba(20,4,7,.42));opacity:.9;transition:opacity .5s}
 .gallery picture:hover::after{opacity:.25}
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   REFINAMIENTO 2026 — legibilidad, animación sin JS y limpieza visual
+   Se aplica encima de NEXUS LUXE: conserva el negro+oro y corrige lo
+   que envejecía la página (bloques sólidos, texto apagado, reveal frágil).
+   ══════════════════════════════════════════════════════════════════ */
+:root{
+  --r-sm:14px; --r-md:20px; --r-lg:28px;
+  --sh-soft:0 18px 48px -20px rgba(0,0,0,.55);
+  --sh-lift:0 30px 70px -24px rgba(0,0,0,.65);
+  --read:#e6dbc9;           /* texto de lectura: sube el contraste sobre negro */
+  --read-dim:#bcae97;
+}
+html{color-scheme:dark;scroll-padding-top:96px}
+:where(a,button,summary,[tabindex]):focus-visible{outline:2px solid var(--gold-2);outline-offset:3px;border-radius:6px}
+
+/* ── Lectura: el sitio tiene textos largos y en oscuro cansan si van apagados */
+.section p,.prose p{color:var(--read);font-size:17px;line-height:1.78;text-wrap:pretty}
+.prose{max-width:68ch}
+.section .lead{color:var(--read-dim);text-wrap:pretty}
+.section h2{letter-spacing:-.025em;text-wrap:balance}
+
+/* ── Hero: fuera el bloque dorado sólido detrás del título (efecto resaltador).
+   El contraste lo da un velo sobre la foto, no una caja de color. */
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(100deg,rgba(10,4,6,.86) 0%,rgba(10,4,6,.62) 46%,rgba(10,4,6,.28) 100%)}
+.hero h1{display:block;background:none;padding:0;box-shadow:none;border-radius:0;
+  color:var(--cream);text-shadow:0 2px 30px rgba(0,0,0,.6);line-height:1.02}
+.hero .tagline strong{background:none;color:var(--gold-2);padding:0;box-shadow:none;
+  text-shadow:0 2px 22px rgba(232,199,90,.35)}
+.hero .sub{color:rgba(251,244,230,.94);font-size:18px;line-height:1.72;text-wrap:pretty}
+
+/* ── Tarjetas y bloques: radios mayores y sombras difusas en vez de bordes duros */
+.trust>div,.trust>a,.step,.qa,.rep .card,.plan{border-radius:var(--r-lg)}
+.trust>div,.trust>a{background:rgba(255,253,247,.05);border-color:rgba(232,199,90,.2)}
+.step,.qa,.rep .card{box-shadow:var(--sh-soft)}
+.step:hover,.rep .card:hover{transform:translateY(-4px);box-shadow:var(--sh-lift)}
+.step,.rep .card{transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
+
+/* ── Animación de entrada sin depender de JavaScript.
+   Antes: .reveal{opacity:0} y si el script no corría, el texto no se veía nunca.
+   Ahora el contenido es visible por defecto y la animación la conduce el scroll
+   donde el navegador la soporta. */
+.reveal{opacity:1;transform:none}
+@supports (animation-timeline:view()){
+  .reveal:not(.in){animation:reveal2026 linear both;animation-timeline:view();
+    animation-range:entry 0% cover 20%}
+}
+@keyframes reveal2026{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+/* ── Respeto por quien pide menos movimiento */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
