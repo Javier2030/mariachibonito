@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — Gachancipá",
+ "short_name": "Mariachi Gachancipá",
+ "description": "Serenatas y mariachis a domicilio en Gachancipá, las 24 horas. Precios de Gachancipá.",
+ "start_url": "/mariachis-gachancipa.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en Gachancipá",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20Gachancipá"
+  },
+  {
+   "name": "Precios en Gachancipá",
+   "url": "/mariachis-gachancipa.html#paquetes"
+  }
+ ]
+}
