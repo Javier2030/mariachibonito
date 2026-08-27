@@ -121,6 +121,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(38,7,12,.72);backdrop-fi
 .rsn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:20px;text-align:left}.rsn{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 20px;margin:0}.rsn-str{color:var(--gold);letter-spacing:2px;font-size:15px;margin-bottom:8px}.rsn blockquote{margin:0 0 12px;font-size:15px;line-height:1.65;color:var(--ink)}.rsn figcaption{font-size:13.5px;font-weight:700;color:var(--wine)}.rsn figcaption span{font-weight:400;color:var(--muted)}
 .tagdias{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--wine);color:var(--gold-2);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 14px;border-radius:999px;border:1px solid var(--gold);white-space:nowrap}
 .tagpop{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold-2),var(--gold));color:#2d1a05;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 16px;border-radius:999px;box-shadow:0 6px 18px -4px var(--gold-glow)}
+.tagalt{background:linear-gradient(135deg,#f3f3f5,#dfe1e6);color:#33373f;box-shadow:0 5px 14px -5px rgba(30,34,42,.32)}
 .note{text-align:center;color:var(--muted);font-size:14px;margin-top:22px}
 
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;margin-top:8px}
