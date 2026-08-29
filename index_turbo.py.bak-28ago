@@ -1,0 +1,333 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+index_turbo.py — Acelerador de indexación GSC para los 3 sitios mariachi.
+Cada corrida: por sitio, calcula pendientes = sitemap − indexadas − ya-solicitadas(<7d),
+navega la pestaña GSC a la propiedad y pide "Solicitar indexación" (gsc_turbo.ps1)
+hasta MAX_REQ URLs o cuota agotada. Si la inspección revela que ya está indexada,
+la marca sin gastar cuota. Estado en index_turbo_state.json. Aviso TG al final.
+Cron diario hasta que los 3 sitios queden al 100%.
+"""
+import sys, json, os, re, subprocess, time, urllib.request
+
+BASE = os.path.dirname(os.path.abspath(__file__))
+STATE = os.path.join(BASE, "index_turbo_state.json")
+ENV_TG = "/home/caper_mata/arkea_quantum/mt5_bridge/.env"
+PS = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+EDGE = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+MAX_REQ = 14          # tope por sitio y corrida. La cuota es POR CUENTA (~12-14); con 3 cuentas delegadas (22-jul) hay ~36-42/día
+
+REQ_TTL_DAYS = 7      # no re-solicitar la misma URL antes de 7 días
+AUTHUSERS = [1, 2, 0]  # /u/N del perfil Edge: 1=cesarperez060800, 2=mariachiportuguesa@gmail (si tiene sesión), 0=apolo489 al final (el agente sentimientos 12:30 gasta la de apolo)
+
+SITES = [
+    # ⛔ RETIRADO 2026-08-05 — mariachitenampa NO debe indexarse mientras viva en el
+    # github.io de la cuenta: sería un tercer sitio de mariachi en Bogotá bajo el mismo
+    # titular, delatando la relación con mariachibonito.com en la propia URL (su
+    # robots.txt dice Disallow: / y su generador ya no lo puede pisar). Pedir su
+    # indexación aquí contradecía frontalmente esa decisión de OPSEC, y además gastaba
+    # una corrida diaria fallando con "sitemap inaccesible" (no hay sitemap a propósito).
+    # Reactivar SOLO el día que tenga dominio propio, junto con ARKEA_TENAMPA_INDEXAR=1.
+    #   {"domain": "javier2030.github.io/mariachitenampa", ...}
+    # ⏱ TEMPORAL 27-ago-2026 — mariachibonito va PRIMERO hasta que Google refresque
+    # los precios. Subieron los 31 municipios y el SERP sigue mostrando las cifras
+    # viejas: un cliente ve $360.000 en Google y $420.000 al entrar. Yendo 5º, el
+    # cron de las 06:30 llegaba aquí con la cuota ya gastada en los 475 pendientes
+    # de abogadosenvenezuela — hoy: "0 solicitadas, CUOTA AGOTADA" en las 3 cuentas.
+    # DEVOLVER a su posición original cuando las 36 de `prioridad` estén refrescadas.
+    {"domain": "mariachibonito.com",
+     "resource": "sc-domain:mariachibonito.com", "match": "mariachibonito",
+     # 26-ago: sin `prioridad` la cuota diaria se gastaba en el orden alfabético del
+     # sitemap, y una zona recién abierta —justo la que no tiene NADA indexado— quedaba
+     # de última. Las páginas de municipio nuevas van primero hasta que Google confirme.
+     "prioridad": ["mariachis-mosquera", "mariachis-sibate", "mariachis-funza", "mariachis-chia", "mariachis-madrid-cundinamarca", "mariachis-cota", "mariachis-tenjo", "mariachis-silvania", "mariachis-cajica", "mariachis-facatativa", "mariachis-sopo", "mariachis-fusagasuga", "mariachis-tocancipa", "mariachis-zipaquira", "mariachis-tabio", "mariachis-la-mesa", "mariachis-la-calera", "mariachis-anapoima", "mariachis-granada-cundinamarca", "mariachis-mesitas-del-colegio", "mariachis-el-rosal", "mariachis-bojaca", "mariachis-zipacon", "mariachis-subachoque", "mariachis-la-vega", "mariachis-gachancipa", "mariachis-cogua", "mariachis-nemocon", "mariachis-sesquile", "mariachis-guasca", "mariachis-guatavita", "cuanto-cuesta-serenata-mariachi-2026", "cuanto-cuesta-mariachi-bogota", "guia-serenatas-mariachis-bogota", "mariachis-norte-de-bogota", "index"],
+     "hist": "/home/caper_mata/mariachi/index_history.json"},
+    {"domain": "abogadosenvenezuela.com",
+     "resource": "sc-domain:abogadosenvenezuela.com", "match": "abogadosenvenezuela",
+     "authusers": [1, 2, 0],  # delegada 22-jul a cesarperez060800 y mariachiportuguesa (permiso Completo)
+     # PRIORIDAD (25-ago-2026). Con 475 pendientes y ~35 solicitudes al día, el orden
+     # alfabético quemaba la cuota en páginas al azar. Este orden lo fija el negocio:
+     #  1) Portuguesa: es donde está el despacho. Si algo tiene que salir en Google, es esto.
+     #  2) Antecedentes penales: el servicio que más piden ahora mismo por WhatsApp.
+     #  3) Países con clientes ESCRIBIENDO (chats del 24-ago): Costa Rica, Chile, Colombia,
+     #     Ecuador, Paraguay, Brasil, México, EE.UU., Dominicana, Italia, España, Argentina.
+     #  4) Ciudades de casos vivos: Falcón, Monagas, Apure, Táchira, La Guaira.
+     # Lo que no casa con ninguno NO se descarta: se pide después.
+     "prioridad": [
+         "-en-guanare", "-en-acarigua", "-en-araure",
+         "antecedentes-penales-apostillados-en-", "antecedentes-desde-costa-rica",
+         "-desde-costa-rica", "-desde-chile", "-desde-colombia", "-desde-ecuador",
+         "-desde-paraguay", "-desde-brasil", "-desde-mexico", "-desde-estados-unidos",
+         "-desde-republica-dominicana", "-desde-italia", "-desde-espana", "-desde-argentina",
+         "-en-coro", "-en-punto-fijo", "-en-maturin", "-en-san-fernando-de-apure",
+         "-en-san-cristobal", "-en-la-guaira", "-en-catia-la-mar",
+         "abogados-en-", "antecedentes-desde-",
+     ],
+     "hist": "/home/caper_mata/bufete_virtual/index_history.json"},
+    {"domain": "luzygracia.com",
+     "resource": "sc-domain:luzygracia.com", "match": "luzygracia",
+     "authusers": [1, 2, 0],  # delegada 22-jul a cesarperez060800 y mariachiportuguesa (permiso Completo)
+     "hist": "/home/caper_mata/tienda_cristiana/index_history.json"},
+    {"domain": "mariachiportuguesa.com",
+     "resource": "https://mariachiportuguesa.com/", "match": "mariachiportuguesa",
+     "hist": "/home/caper_mata/mariachiportuguesa/index_history.json"},
+    {"domain": "mariachisentimientos.com",
+     "resource": "https://mariachisentimientos.com/", "match": "mariachisentimientos",
+     "hist": "/home/caper_mata/mariachisentimientos/index_history.json"},
+    # Publicado el 5-ago-2026. Vive en su propia cuenta (indexacesar1 = authuser 3),
+    # así que no comparte la rotación de cuotas con los demás.
+    {"domain": "mariachiestrellamexicana.com",
+     "resource": "sc-domain:mariachiestrellamexicana.com", "match": "mariachiestrellamexicana",
+     "authusers": [3],
+     "hist": "/home/caper_mata/nexo-sentinel/mariachi-estrella/index_history.json"},
+]
+
+
+# Permite correr el turbo para un solo sitio:  index_turbo.py mariachiestrellamexicana
+ONLY = (sys.argv[1] if len(sys.argv) > 1 else "").strip().lower()
+if ONLY:
+    SITES = [x for x in SITES if ONLY in x["domain"]]
+
+
+def fix_interop():
+    import glob
+    def ps_ok():
+        try:
+            r = subprocess.run([PS, "-NoProfile", "-Command", "echo ok"],
+                               capture_output=True, text=True, timeout=15)
+            return "ok" in (r.stdout or "")
+        except Exception:
+            return False
+    if ps_ok():
+        return True
+    for s in sorted(glob.glob("/run/WSL/*_interop")):
+        os.environ["WSL_INTEROP"] = s
+        if ps_ok():
+            return True
+    return False
+
+
+def cdp_alive():
+    r = subprocess.run([PS, "-NoProfile", "-Command",
+                        "(Invoke-WebRequest 'http://127.0.0.1:9333/json/version' -UseBasicParsing -TimeoutSec 5).StatusCode"],
+                       capture_output=True, text=True, errors="replace", timeout=30)
+    return "200" in (r.stdout or "")
+
+
+def launch_edge():
+    subprocess.run([PS, "-NoProfile", "-Command",
+                    f"Start-Process -FilePath '{EDGE}' -ArgumentList "
+                    "'--remote-debugging-port=9333','--user-data-dir=C:\\temp\\edge_cdp','--no-first-run',"
+                    "'--disable-background-timer-throttling','about:blank'"],
+                   capture_output=True, text=True, timeout=30)
+    time.sleep(12)
+
+
+def tabs_json():
+    r = subprocess.run([PS, "-NoProfile", "-Command",
+                        "(Invoke-WebRequest 'http://127.0.0.1:9333/json' -UseBasicParsing -TimeoutSec 10).Content"],
+                       capture_output=True, text=True, errors="replace", timeout=30)
+    return r.stdout or ""
+
+
+def fresh_gsc_tab(resource, authuser=0):
+    """Cierra pestanas GSC viejas (la SPA degenera con horas abierta: el submit
+    de la barra deja de responder) y abre una nueva directo en la propiedad."""
+    import json as _j
+    try:
+        tabs = _j.loads(tabs_json())
+    except Exception:
+        tabs = []
+    for t in tabs:
+        if "search-console" in t.get("url", ""):
+            subprocess.run([PS, "-NoProfile", "-Command",
+                            f"try{{Invoke-WebRequest 'http://127.0.0.1:9333/json/close/{t['id']}' -UseBasicParsing -TimeoutSec 10 | Out-Null}}catch{{}}"],
+                           capture_output=True, text=True, timeout=30)
+    url = f"https://search.google.com/u/{authuser}/search-console?resource_id={resource}"
+    for method in ("Put", "Get"):
+        subprocess.run([PS, "-NoProfile", "-Command",
+                        f"try{{Invoke-WebRequest 'http://127.0.0.1:9333/json/new?{url}' "
+                        f"-Method {method} -UseBasicParsing -TimeoutSec 10 | Out-Null}}catch{{}}"],
+                       capture_output=True, text=True, timeout=30)
+        time.sleep(9)
+        if "search-console" in tabs_json():
+            return True
+    return False
+
+
+def tg(text):
+    tok = chat = None
+    try:
+        for ln in open(ENV_TG):
+            if ln.startswith("TG_TOKEN="): tok = ln.split("=", 1)[1].strip()
+            if ln.startswith("TG_CHAT="): chat = ln.split("=", 1)[1].strip()
+    except Exception:
+        pass
+    if not tok or not chat:
+        print("(sin TG)\n" + text); return
+    try:
+        # sin parse_mode: el resumen lleva URLs y símbolos (<, &, _) que Telegram
+        # rechaza con HTTP 400 al intentar interpretarlos como marcado (fallo 23-jul)
+        d = json.dumps({"chat_id": chat, "text": text,
+                        "disable_web_page_preview": True}).encode()
+        urllib.request.urlopen(urllib.request.Request(
+            f"https://api.telegram.org/bot{tok}/sendMessage", data=d,
+            headers={"Content-Type": "application/json"}), timeout=10)
+    except Exception as e:
+        print("TG fail:", e)
+
+
+def por_prioridad(pending, patrones):
+    """Ordena los pendientes por valor de negocio en vez de alfabéticamente.
+
+    La cuota de «Solicitar indexación» es de ~12-14 por cuenta y día: con cientos de páginas
+    pendientes, el orden alfabético gasta el presupuesto del día en lo que empiece por «a».
+    `patrones` es una lista ordenada de subcadenas; lo que casa con la primera va primero.
+    Lo que no casa con ninguna se pide al final, pero NO se descarta.
+    """
+    if not patrones:
+        return pending
+    def rango(u):
+        for i, pat in enumerate(patrones):
+            if pat in u:
+                return i
+        return len(patrones)
+    return sorted(pending, key=rango)   # sorted es estable: dentro del grupo, orden original
+
+
+def sitemap_urls(domain):
+    # resiliente: si el cert HTTPS falla (propagación GitHub Pages), reintenta sin verificar y luego HTTP
+    import ssl
+    for url, ctx in ((f"https://{domain}/sitemap.xml", None),
+                     (f"https://{domain}/sitemap.xml", ssl._create_unverified_context()),
+                     (f"http://{domain}/sitemap.xml", None)):
+        try:
+            sm = urllib.request.urlopen(url, timeout=20, context=ctx).read().decode()
+            locs = re.findall(r"<loc>(.*?)</loc>", sm)
+            if locs:
+                return locs
+        except Exception:
+            continue
+    raise RuntimeError("sitemap inaccesible por todas las vías")
+
+
+def ps_run(script, args, timeout):
+    r = subprocess.run([PS, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script] + args,
+                       capture_output=True, text=True, errors="replace", timeout=timeout)
+    return r.stdout or ""
+
+
+
+
+
+def hist_indexed(site):
+    """URLs indexadas SEGÚN LA ÚLTIMA MEDICIÓN del vigía site:.
+
+    FIX 2026-08-05: antes devolvía la UNIÓN con `urls_union_seen` (acumulado histórico),
+    así que una URL que estuvo indexada una vez y luego SE CAYÓ del índice contaba como
+    indexada para siempre y no se volvía a pedir jamás. Efecto medido en mariachibonito:
+    index_watch decía 76/91 e index_turbo se declaraba «sin pendientes, 91/91» — 5 páginas
+    caídas del índice quedaban abandonadas (canciones-para-bodas, mariachis-la-mesa,
+    primera-comunion, despecho, misa-ranchera).
+    Ahora manda el estado ACTUAL. El ruido de las consultas site: (una URL que un día no
+    aparece y al siguiente sí) ya está acotado por REQ_TTL_DAYS: como mucho cuesta una
+    solicitud por semana y por URL, mucho más barato que abandonarla."""
+    try:
+        h = json.load(open(site["hist"]))
+        paths = set(h.get("urls", []) or [])
+        return {f"https://{site['domain']}{p}" for p in paths}
+    except Exception:
+        return set()
+
+
+def main():
+    print(f"== index_turbo {time.strftime('%Y-%m-%d %H:%M:%S')} ==")
+    if not fix_interop():
+        print("interop muerto"); return
+    if not cdp_alive():
+        launch_edge()
+        if not cdp_alive():
+            tg("⚡ index_turbo: no pude levantar Edge CDP 9333."); return
+
+
+    st = {}
+    if os.path.exists(STATE):
+        try: st = json.load(open(STATE))
+        except Exception: st = {}
+
+    today = time.strftime("%Y-%m-%d")
+    lines = []
+    for site in SITES:
+        d = site["domain"]
+        s = st.setdefault(d, {"indexed_confirmed": [], "requested": {}})
+        try:
+            urls = sitemap_urls(d)
+        except Exception as e:
+            lines.append(f"• {d}: sitemap inaccesible ({e})"); continue
+        indexed = set(s["indexed_confirmed"]) | hist_indexed(site)
+        recent = {u for u, day in s["requested"].items()
+                  if (time.mktime(time.strptime(today, "%Y-%m-%d")) -
+                      time.mktime(time.strptime(day, "%Y-%m-%d"))) < REQ_TTL_DAYS * 86400}
+        pending = [u for u in urls if u not in indexed and u not in recent]
+        # 25-ago: la lista `prioridad` del sitio existía pero nunca se aplicaba — `pending`
+        # salía en el orden del sitemap (alfabético) y la cuota se iba en las «a».
+        pending = por_prioridad(pending, site.get("prioridad"))
+        if not pending:
+            n_idx = len([u for u in urls if u in indexed])
+            lines.append(f"• {d}: sin pendientes (indexadas conocidas {n_idx}/{len(urls)}, resto ya solicitado <7d)")
+            continue
+        req = conf = 0
+        quota_final = False
+        for au in site.get("authusers", AUTHUSERS):
+            if not fresh_gsc_tab(site["resource"], au):
+                lines.append(f"• {d}: no pude abrir pestaña GSC (authuser {au})"); continue
+            procesadas = 0
+            fails = 0
+            quota = False
+            for u in [x for x in pending if x not in s["requested"] and x not in s["indexed_confirmed"]]:
+                if req >= MAX_REQ or quota:
+                    break
+                if procesadas and procesadas % 5 == 0:
+                    fresh_gsc_tab(site["resource"], au)
+                procesadas += 1
+                try:
+                    out = ps_run(r"C:\temp\gsc_turbo.ps1", ["-Target", u], 420)
+                except subprocess.TimeoutExpired:
+                    print(f"  timeout {u}"); continue
+                if fails >= 3:
+                    print(f"  3 fallos seguidos con authuser {au}: salto de cuenta"); break
+                if "ESTADO=INDEXADA" in out:
+                    if u not in s["indexed_confirmed"]:
+                        s["indexed_confirmed"].append(u)
+                    conf += 1
+                    fails = 0
+                    print(f"  ya indexada: {u}")
+                elif "SOLICITADA=True" in out:
+                    s["requested"][u] = today
+                    req += 1
+                    fails = 0
+                    print(f"  solicitada: {u} (authuser {au})")
+                elif "CUOTA_AGOTADA" in out:
+                    quota = True
+                    print(f"  cuota agotada (authuser {au})")
+                else:
+                    fails += 1
+                    print(f"  fallo: {u} :: {out.strip()[:160]}")
+                json.dump(st, open(STATE, "w"), ensure_ascii=False, indent=1)
+                time.sleep(5)
+            quota_final = quota
+            if not quota:
+                break  # pendientes agotados o tope alcanzado sin cuota: no hace falta otra cuenta
+        n_idx = len(set(s['indexed_confirmed']) | hist_indexed(site))
+        extra = " (CUOTA AGOTADA)" if quota_final else ""
+        lines.append(f"• {d}: {req} solicitadas hoy, {conf} confirmadas ya-indexadas, "
+                     f"{n_idx}/{len(urls)} en índice{extra}")
+
+    json.dump(st, open(STATE, "w"), ensure_ascii=False, indent=1)
+    tg("⚡ <b>INDEX TURBO diario</b>\n\n" + "\n".join(lines) +
+       "\n\nSigo a diario hasta indexar el 100% de los 3 sitios.")
+    print("\n".join(lines))
+
+
+if __name__ == "__main__":
+    main()
