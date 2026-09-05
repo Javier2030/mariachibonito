@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — Fosca",
+ "short_name": "Mariachi Fosca",
+ "description": "Serenatas y mariachis a domicilio en Fosca, las 24 horas. Precios de Fosca.",
+ "start_url": "/mariachis-fosca.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en Fosca",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20Fosca"
+  },
+  {
+   "name": "Precios en Fosca",
+   "url": "/mariachis-fosca.html#paquetes"
+  }
+ ]
+}

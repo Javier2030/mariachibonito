@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — Une",
+ "short_name": "Mariachi Une",
+ "description": "Serenatas y mariachis a domicilio en Une, las 24 horas. Precios de Une.",
+ "start_url": "/mariachis-une.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en Une",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20Une"
+  },
+  {
+   "name": "Precios en Une",
+   "url": "/mariachis-une.html#paquetes"
+  }
+ ]
+}
