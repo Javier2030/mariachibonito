@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — San Antonio del Tequendama",
+ "short_name": "Mariachi San Antonio del Teque",
+ "description": "Serenatas y mariachis a domicilio en San Antonio del Tequendama, las 24 horas. Precios de San Antonio del Tequendama.",
+ "start_url": "/mariachis-san-antonio-del-tequendama.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en San Antonio del Tequendama",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20San%20Antonio%20del%20Tequendama"
+  },
+  {
+   "name": "Precios en San Antonio del Tequendama",
+   "url": "/mariachis-san-antonio-del-tequendama.html#paquetes"
+  }
+ ]
+}
