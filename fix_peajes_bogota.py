@@ -9,6 +9,11 @@ MUNICIPIOS = {
     "granada-cundinamarca", "la-calera", "la-mesa", "madrid-cundinamarca",
     "mesitas-del-colegio", "mosquera", "sibate", "silvania", "soacha", "sopo",
     "tabio", "tenjo", "tocancipa", "zipaquira",
+    # 21-sep: municipios añadidos después (sabana, Tequendama y Oriente). Sin
+    # ellos este script les quitaba los peajes y dejaba «el <b>el traslado».
+    "bojaca", "caqueza", "chipaque", "choachi", "cogua", "el-rosal", "fomeque",
+    "gachancipa", "guasca", "guatavita", "la-vega", "nemocon",
+    "san-antonio-del-tequendama", "sesquile", "subachoque", "ubaque", "zipacon",
 }
 
 REEMPLAZOS = [
