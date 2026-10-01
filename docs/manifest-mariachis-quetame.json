@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — Quetame",
+ "short_name": "Mariachi Quetame",
+ "description": "Serenatas y mariachis a domicilio en Quetame, las 24 horas. Precios de Quetame.",
+ "start_url": "/mariachis-quetame.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en Quetame",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20Quetame"
+  },
+  {
+   "name": "Precios en Quetame",
+   "url": "/mariachis-quetame.html#paquetes"
+  }
+ ]
+}

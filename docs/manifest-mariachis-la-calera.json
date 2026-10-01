@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — La Calera",
+ "short_name": "Mariachi La Calera",
+ "description": "Serenatas y mariachis a domicilio en La Calera, las 24 horas. Precios de La Calera.",
+ "start_url": "/mariachis-la-calera.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en La Calera",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20La%20Calera"
+  },
+  {
+   "name": "Precios en La Calera",
+   "url": "/mariachis-la-calera.html#paquetes"
+  }
+ ]
+}

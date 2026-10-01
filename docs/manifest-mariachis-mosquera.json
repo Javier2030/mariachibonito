@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — Mosquera",
+ "short_name": "Mariachi Mosquera",
+ "description": "Serenatas y mariachis a domicilio en Mosquera, las 24 horas. Precios de Mosquera.",
+ "start_url": "/mariachis-mosquera.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en Mosquera",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20Mosquera"
+  },
+  {
+   "name": "Precios en Mosquera",
+   "url": "/mariachis-mosquera.html#paquetes"
+  }
+ ]
+}

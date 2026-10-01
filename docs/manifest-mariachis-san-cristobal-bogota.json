@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — San Cristóbal",
+ "short_name": "Mariachi San Cristóbal",
+ "description": "Serenatas y mariachis a domicilio en San Cristóbal, las 24 horas. Precios de San Cristóbal.",
+ "start_url": "/mariachis-san-cristobal-bogota.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en San Cristóbal",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20San%20Cristóbal"
+  },
+  {
+   "name": "Precios en San Cristóbal",
+   "url": "/mariachis-san-cristobal-bogota.html#paquetes"
+  }
+ ]
+}

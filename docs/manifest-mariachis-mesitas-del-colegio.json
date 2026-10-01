@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — Mesitas del Colegio",
+ "short_name": "Mariachi Mesitas del Colegio",
+ "description": "Serenatas y mariachis a domicilio en Mesitas del Colegio, las 24 horas. Precios de Mesitas del Colegio.",
+ "start_url": "/mariachis-mesitas-del-colegio.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en Mesitas del Colegio",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20Mesitas%20del%20Colegio"
+  },
+  {
+   "name": "Precios en Mesitas del Colegio",
+   "url": "/mariachis-mesitas-del-colegio.html#paquetes"
+  }
+ ]
+}

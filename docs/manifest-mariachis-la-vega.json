@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — La Vega",
+ "short_name": "Mariachi La Vega",
+ "description": "Serenatas y mariachis a domicilio en La Vega, las 24 horas. Precios de La Vega.",
+ "start_url": "/mariachis-la-vega.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en La Vega",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20La%20Vega"
+  },
+  {
+   "name": "Precios en La Vega",
+   "url": "/mariachis-la-vega.html#paquetes"
+  }
+ ]
+}

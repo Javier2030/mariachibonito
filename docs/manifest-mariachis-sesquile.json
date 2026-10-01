@@ -1,0 +1,39 @@
+{
+ "name": "Mariachi Bonito — Sesquilé",
+ "short_name": "Mariachi Sesquilé",
+ "description": "Serenatas y mariachis a domicilio en Sesquilé, las 24 horas. Precios de Sesquilé.",
+ "start_url": "/mariachis-sesquile.html",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#1c0508",
+ "theme_color": "#6E1423",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Cotizar en Sesquilé",
+   "url": "https://wa.me/573014232500?text=Hola,%20quiero%20cotizar%20una%20serenata%20en%20Sesquilé"
+  },
+  {
+   "name": "Precios en Sesquilé",
+   "url": "/mariachis-sesquile.html#paquetes"
+  }
+ ]
+}
