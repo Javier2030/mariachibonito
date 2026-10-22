@@ -1,3 +1,128 @@
+(function () {
+/* Origen de la visita (red social) para Mariachi Bonito */
+var origenMB = (function () {
+  var W = window, D = document, VIDA = 30 * 864e5, CLAVE = 'mbOrg';
+  var etiquetas = {
+    instagram: '📸 Vengo de Instagram — ',
+    facebook: '👍 Vengo de Facebook — ',
+    tiktok: '🎵 Vengo de TikTok — '
+  };
+  var saludo = 'Hola, quiero información de una serenata.';
+  var yaMarcado = /Vengo de (Instagram|Facebook|TikTok) — /;
+  var esWhats = /^(?:(?:https?:)?\/\/(?:wa\.me|(?:www\.|api\.|web\.)?whatsapp\.com)(?:[\/?#]|$)|whatsapp:\/\/)/i;
+
+  function leeParam(n) {
+    var s = W.location.search;
+    try { return new URLSearchParams(s).get(n); } catch (e) {
+      var m = new RegExp('[?&]' + n + '(?:=([^&]*))?(?:&|$)').exec(s);
+      return m ? (m[1] || '') : null;
+    }
+  }
+  function hostRef() {
+    var m = /^https?:\/\/([^\/?#:]+)/i.exec(D.referrer || '');
+    return m ? m[1].toLowerCase() : '';
+  }
+  function detectaOrigen() {
+    var us = (leeParam('utm_source') || '').toLowerCase(), h = hostRef(), ua = navigator.userAgent || '';
+    if (us === 'instagram' || us === 'ig' || leeParam('ig') !== null) return 'instagram';
+    if (us === 'facebook' || us === 'fb') return 'facebook';
+    if (us === 'tiktok') return 'tiktok';
+    if (/(^|\.)instagram\.com$/.test(h) || /Instagram/.test(ua)) return 'instagram';
+    if (leeParam('fbclid') !== null || /(^|\.)facebook\.com$/.test(h) || /FBAN|FBAV/.test(ua)) return 'facebook';
+    if (/(^|\.)tiktok\.com$/.test(h) || /musical_ly|BytedanceWebview|TikTok/.test(ua)) return 'tiktok';
+    return null;
+  }
+  function origenGuardado() {
+    var r;
+    try { r = JSON.parse(localStorage.getItem(CLAVE)); if (r && etiquetas[r.o] && Date.now() - r.t < VIDA) return r.o; } catch (e) {}
+    try { r = JSON.parse(sessionStorage.getItem(CLAVE)); if (r && etiquetas[r.o]) return r.o; } catch (e) {}
+    return null;
+  }
+  function guardaOrigen(o) {
+    var s = JSON.stringify({ o: o, t: Date.now() });
+    try { localStorage.setItem(CLAVE, s); } catch (e) {}
+    try { sessionStorage.setItem(CLAVE, s); } catch (e) {}
+  }
+
+  var nuevo = detectaOrigen(), org = nuevo || origenGuardado();
+  if (nuevo) guardaOrigen(nuevo);
+  if (!org) return function () { return null; };
+
+  function conMarca(u) {
+    if (typeof u !== 'string' || !esWhats.test(u)) return u;
+    var orig = u, m = etiquetas[org], hash = '', i = u.indexOf('#');
+    if (i > -1) { hash = u.slice(i); u = u.slice(0, i); }
+    var q = u.indexOf('?'), base = q < 0 ? u : u.slice(0, q);
+    var ps = q < 0 ? [] : u.slice(q + 1).split('&').filter(Boolean), hecho = false;
+    for (var j = 0; j < ps.length && !hecho; j++) {
+      if (!/^text=/i.test(ps[j])) continue;
+      var v = ps[j].slice(5), d = v;
+      try { d = decodeURIComponent(v.replace(/\+/g, ' ')); } catch (e) {}
+      hecho = true;
+      if (yaMarcado.test(d)) return orig;
+      ps[j] = /^\s*$/.test(d) ? 'text=' + encodeURIComponent(m + saludo) : 'text=' + encodeURIComponent(m) + v;
+    }
+    if (!hecho) ps.push('text=' + encodeURIComponent(m + saludo));
+    return base + '?' + ps.join('&') + hash;
+  }
+  function tocaEnlace(el) {
+    if (!el || !el.getAttribute) return;
+    var h = el.getAttribute('href');
+    if (h) { var n = conMarca(h); if (n !== h) el.setAttribute('href', n); }
+    var c = el.getAttribute('onclick');
+    if (c && /wa\.me|whatsapp/i.test(c)) {
+      var n2 = c.replace(/https?:\/\/(?:wa\.me\/\d+|(?:api|web|www)\.whatsapp\.com\/send)[^'"\s)]*(?=['"])/gi, conMarca);
+      if (n2 !== c) el.setAttribute('onclick', n2);
+    }
+  }
+  function barreEnlaces() {
+    var l = D.querySelectorAll('a[href*="wa.me"],a[href*="whatsapp"],[onclick*="wa.me"],[onclick*="whatsapp"]');
+    for (var i = 0; i < l.length; i++) tocaEnlace(l[i]);
+  }
+
+  barreEnlaces();
+  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', barreEnlaces);
+  // enlaces que aparecen después de cargar
+  if (W.MutationObserver) {
+    var t = 0;
+    new MutationObserver(function () {
+      if (t) return;
+      t = setTimeout(function () { t = 0; barreEnlaces(); }, 60);
+    }).observe(D.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['href', 'onclick'] });
+  }
+  // por captura: lo que se haya tocado a mano justo antes del clic también lleva la marca
+  D.addEventListener('click', function (e) {
+    for (var el = e.target; el && el !== D; el = el.parentNode) tocaEnlace(el);
+  }, true);
+  // aperturas programáticas (formularios)
+  var abrir = W.open;
+  W.open = function (u) {
+    var a = Array.prototype.slice.call(arguments);
+    a[0] = conMarca(u);
+    return abrir.apply(W, a);
+  };
+
+  // medición
+  function mideOrigen() {
+    try {
+      if (typeof W.clarity === 'function') {
+        W.clarity('set', 'origen', org);
+        if (nuevo && !sessionStorage.getItem(CLAVE + 'c')) { sessionStorage.setItem(CLAVE + 'c', '1'); W.clarity('event', 'llegada_' + org); }
+      }
+    } catch (e) {}
+    try {
+      if (typeof W.gtag === 'function') {
+        W.gtag('set', { origen_visita: org });
+        if (nuevo && !sessionStorage.getItem(CLAVE + 'g')) { sessionStorage.setItem(CLAVE + 'g', '1'); W.gtag('event', 'llegada_origen', { origen: org }); }
+      }
+    } catch (e) {}
+  }
+  mideOrigen();
+  W.addEventListener('load', function () { mideOrigen(); setTimeout(mideOrigen, 4000); });
+  return function () { return org; };
+})();
+
+})();
 /* Banner de instalación PWA — Mariachi Bonito Tecalitlán */
 (function () {
   var BRAND = "Mariachi Bonito";
