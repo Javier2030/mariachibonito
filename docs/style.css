@@ -579,3 +579,5 @@ html{color-scheme:dark;scroll-padding-top:96px}
 @keyframes btnBreathT{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .plan{animation-play-state:paused}
 .plans.vivo .plan{animation-play-state:running}
+/* 9-nov-2026 (César): la cantidad de canciones de cada paquete, 30 % más grande (14,5 px → 18,85 px) */
+.plan li.canc{font-size:18.85px}
