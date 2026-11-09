@@ -584,5 +584,8 @@ html{color-scheme:dark;scroll-padding-top:96px}
 .plan li.dest{font-size:22.6px}
 
 /* 9-nov-2026 (César): la tarjeta Platino es la más larga (~890-930 px) y no cabía en una captura del celular.
-   Solo en celular va al 90 %; en computador queda igual para no descuadrar la fila de tarjetas. */
-@media (max-width:600px){.plan.platino{zoom:.9}}
+   Solo en celular va al 85 % (10 % pedido; luego 85 % para que quepa en su pantalla de ~751 px con el encabezado escondido); en computador queda igual para no descuadrar la fila de tarjetas. */
+@media (max-width:600px){.plan.platino{zoom:.85}}
+
+/* 9-nov-2026 (César): en celular el encabezado y la burbuja de WhatsApp se esconden mientras se ven los paquetes (en cada tarjeta sigue el botón Reservar) (lo activa el script con .oculto) */
+@media (max-width:760px){header{transition:transform .3s var(--ease)}header.oculto{transform:translateY(-100%)}.wa-float{transition:transform .3s var(--ease),opacity .3s,visibility .3s}.wa-float.oculto{opacity:0;visibility:hidden;pointer-events:none;animation:none}}
