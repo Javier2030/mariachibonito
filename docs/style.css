@@ -582,3 +582,7 @@ html{color-scheme:dark;scroll-padding-top:96px}
 /* 9-nov-2026 (César): lo que cambia entre paquetes (canciones y obsequios) va grande:
    14,5 px +30 % = 18,85 px, y luego +20 % = 22,6 px. Lo común (integrantes, voz, transporte) queda igual. */
 .plan li.dest{font-size:22.6px}
+
+/* 9-nov-2026 (César): la tarjeta Platino es la más larga (~890-930 px) y no cabía en una captura del celular.
+   Solo en celular va al 90 %; en computador queda igual para no descuadrar la fila de tarjetas. */
+@media (max-width:600px){.plan.platino{zoom:.9}}
