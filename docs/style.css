@@ -579,5 +579,6 @@ html{color-scheme:dark;scroll-padding-top:96px}
 @keyframes btnBreathT{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .plan{animation-play-state:paused}
 .plans.vivo .plan{animation-play-state:running}
-/* 9-nov-2026 (César): la cantidad de canciones de cada paquete, 30 % más grande (14,5 px → 18,85 px) */
-.plan li.canc{font-size:18.85px}
+/* 9-nov-2026 (César): lo que cambia entre paquetes (canciones y obsequios) va grande:
+   14,5 px +30 % = 18,85 px, y luego +20 % = 22,6 px. Lo común (integrantes, voz, transporte) queda igual. */
+.plan li.dest{font-size:22.6px}
